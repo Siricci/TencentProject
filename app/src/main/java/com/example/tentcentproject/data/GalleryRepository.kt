@@ -21,5 +21,5 @@ class GalleryRepository(appDatabase: AppDatabase) {
 
     suspend fun setUri(id: Int, uri: String) {
         pictureDao.setUri(id, uri)
-    }
+    } 
 }

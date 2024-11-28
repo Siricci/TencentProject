@@ -1,4 +1,4 @@
-package com.example.tentcentproject.gallery
+package com.example.tentcentproject
 
 import androidx.lifecycle.ViewModel
 import com.example.tentcentproject.data.GalleryRepository
@@ -7,7 +7,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class GalleryViewModel @Inject constructor(
+class MainViewModel @Inject constructor(
     private val galleryRepository: GalleryRepository
 ): ViewModel() {
     suspend fun getAll() = galleryRepository.getAll()

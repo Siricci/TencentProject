@@ -1,8 +1,8 @@
-package com.example.tentcentproject.data.database
+package com.example.tentcentproject.data
 
 import android.app.Application
 import androidx.room.Room
-import com.example.tentcentproject.data.GalleryRepository
+import com.example.tentcentproject.data.database.AppDatabase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
