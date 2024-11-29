@@ -1,5 +1,6 @@
 package com.example.tentcentproject
 
+import android.net.Uri
 import androidx.lifecycle.ViewModel
 import com.example.tentcentproject.data.GalleryRepository
 import com.example.tentcentproject.data.model.Picture
@@ -10,8 +11,5 @@ import javax.inject.Inject
 class MainViewModel @Inject constructor(
     private val galleryRepository: GalleryRepository
 ): ViewModel() {
-    suspend fun getAll() = galleryRepository.getAll()
-    suspend fun setUri(id: Int, uri: String) = galleryRepository.setUri(id, uri)
-    suspend fun insert(picture: Picture) = galleryRepository.insert(picture)
-    suspend fun update(picture: Picture) = galleryRepository.update(picture)
+    suspend fun insert(uri: Uri, filename: String) = galleryRepository.insert(uri, filename)
 }

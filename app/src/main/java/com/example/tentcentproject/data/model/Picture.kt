@@ -10,7 +10,7 @@ import androidx.room.PrimaryKey
     indices = [Index(value = ["timestamp"], unique = true)]
 )
 data class Picture (
-    @PrimaryKey val id: Int,
+    @PrimaryKey(autoGenerate = true) val id: Int,
     @ColumnInfo(name = URI) val filename: String?,
     @ColumnInfo(name = TIMESTAMP) val timestamp: String,
 ) {
