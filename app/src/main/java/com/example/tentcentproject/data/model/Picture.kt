@@ -11,11 +11,11 @@ import androidx.room.PrimaryKey
 )
 data class Picture (
     @PrimaryKey val id: Int,
-    @ColumnInfo(name = URL) val uri: String?,
+    @ColumnInfo(name = URI) val uri: String?,
     @ColumnInfo(name = TIMESTAMP) val timestamp: String,
 ) {
     companion object NamesVal {
-        const val URL = "uri"
+        const val URI = "uri"
         const val TIMESTAMP = "timestamp"
     }
 }
