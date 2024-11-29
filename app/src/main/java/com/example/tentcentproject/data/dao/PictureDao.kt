@@ -16,10 +16,10 @@ interface PictureDao {
     suspend fun update(picture: Picture)
 
     // TODO 尝试在这里加入分页加载功能
-    @Query("SELECT * FROM gallery ORDER BY timestamp DESC")
+    @Query("SELECT * FROM ${Picture.TABLE_NAME} ORDER BY ${Picture.TIMESTAMP} DESC")
     suspend fun getAll(): List<Picture>
 
-    @Query("UPDATE gallery SET uri = :uri WHERE id = :id")
+    @Query("UPDATE ${Picture.TABLE_NAME} SET ${Picture.URI} = :uri WHERE id = :id")
     suspend fun setUri(id: Int, uri: String)
 }
 
