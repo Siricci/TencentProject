@@ -32,6 +32,11 @@ android {
                 "proguard-rules.pro"
             )
         }
+        debug {
+            isMinifyEnabled = false // 禁用代码压缩
+            isShrinkResources = false // 禁用资源压缩
+            proguardFiles (getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+        }
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
@@ -55,6 +60,7 @@ android {
 
 dependencies {
 
+    implementation(libs.androidx.hilt.common)
     // Room components
     ksp(libs.androidx.room.compiler)
     implementation(libs.androidx.room.runtime)
@@ -62,6 +68,17 @@ dependencies {
     // Hilt components
     implementation(libs.hilt.android.core)
     kapt(libs.hilt.compiler)
+
+    // Timber
+    implementation(libs.timber)
+
+    // Paging3
+    implementation(libs.androidx.paging.runtime)
+    implementation(libs.androidx.paging.compose)
+
+    // work-runtime-ktx
+    implementation (libs.androidx.work.runtime.ktx)
+    implementation(libs.guava)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
@@ -81,6 +98,8 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
     implementation(kotlin("script-runtime"))
+    implementation(libs.androidx.lifecycle.viewmodel.ktx) // 或更高版本
+    implementation(libs.kotlinx.coroutines.android) // 或更高版本
 
     implementation(libs.androidx.room.ktx)
 }

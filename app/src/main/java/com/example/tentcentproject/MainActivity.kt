@@ -1,19 +1,15 @@
 package com.example.tentcentproject
 
-import android.app.Activity
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import androidx.activity.ComponentActivity
-import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.layout.Column
+import androidx.activity.viewModels
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -22,25 +18,25 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults.topAppBarColors
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
-import com.example.tentcentproject.gallery.ImagePickerButton
+import androidx.compose.ui.unit.dp
+import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.collectAsLazyPagingItems
+import com.example.tentcentproject.data.model.Picture
 import com.example.tentcentproject.ui.theme.TentcentProjectTheme
-import javax.inject.Inject
+import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-    @Inject
-    //TODO use a more proper init ?
-    lateinit var viewModel: MainViewModel
+    private val viewModel: MainViewModel by viewModels()
 
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Timber.tag("Activity").d("onCreate")
         enableEdgeToEdge()
         setContent {
             TentcentProjectTheme {
@@ -56,15 +52,17 @@ class MainActivity : ComponentActivity() {
                             },
                             actions = {
                                 Row {
-                                    ImagePickerButton { selectedUris ->
-                                        // TODO Handle selected images
-
-                                    }
-                                    IconButton(onClick = { /* Handle first button click */ }) {
+                                    IconButton(onClick = {
+                                        // TODO refresh
+                                    }) {
                                         Icon(
-                                            painter = painterResource(id = R.drawable.ic_add_button),
-                                            contentDescription = "Add some other pictures Button"
+                                            painter = painterResource(id = R.drawable.ic_filter_button),
+                                            contentDescription = "refresh"
                                         )
+                                    }
+                                    ImagePickerButton { selectedUri ->
+                                        Timber.tag("Activity").d("selectedUri: $selectedUri")
+                                        viewModel.insert(selectedUri)
                                     }
                                 }
                             }
@@ -72,28 +70,27 @@ class MainActivity : ComponentActivity() {
                     },
                     modifier = Modifier.fillMaxSize(),
                 ) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
+                    val lazyPagingItems: LazyPagingItems<Picture> =
+                        viewModel.getItems().collectAsLazyPagingItems()
+
+                    LazyVerticalGrid(
+                        columns = GridCells.Fixed(2), // 设置列数为2
+                        contentPadding = innerPadding,
+                        verticalArrangement = Arrangement.spacedBy(8.dp),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        items(lazyPagingItems.itemCount) { index ->
+                            val picture = lazyPagingItems[index]
+
+                            picture?.let {
+                                val imageUri = remember(picture.uri) { picture.uri }
+
+                                PictureItem(imageUri = picture.uri)
+                            }
+                        }
+                    }
                 }
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    TentcentProjectTheme {
-        Greeting("Android")
     }
 }

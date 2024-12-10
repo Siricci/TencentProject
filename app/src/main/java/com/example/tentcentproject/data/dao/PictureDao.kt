@@ -15,11 +15,7 @@ interface PictureDao {
     @Update(onConflict = OnConflictStrategy.REPLACE)
     suspend fun update(picture: Picture)
 
-    // TODO 尝试在这里加入分页加载功能
-    @Query("SELECT * FROM ${Picture.TABLE_NAME} ORDER BY ${Picture.TIMESTAMP} DESC")
-    suspend fun getAll(): List<Picture>
-
-    @Query("UPDATE ${Picture.TABLE_NAME} SET ${Picture.URI} = :uri WHERE id = :id")
-    suspend fun setUri(id: Int, uri: String)
+    @Query("SELECT * FROM ${Picture.TABLE_NAME} WHERE id >= :lastItemId ORDER BY id ASC LIMIT :pageSize")
+    suspend fun getItemsAfter(lastItemId: Int, pageSize: Int): List<Picture>
 }
 

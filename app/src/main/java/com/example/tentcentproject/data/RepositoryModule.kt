@@ -3,6 +3,7 @@ package com.example.tentcentproject.data
 import android.app.Application
 import androidx.room.Room
 import com.example.tentcentproject.data.database.AppDatabase
+import com.example.tentcentproject.data.fileutil.FileUtil
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -27,8 +28,9 @@ object RepositoryModule {
     @Provides
     @Singleton
     fun provideGalleryRepository(
-        appDatabase: AppDatabase
+        appDatabase: AppDatabase,
+        fileUtil: FileUtil
     ): GalleryRepository {
-        return GalleryRepository(appDatabase)
+        return GalleryRepository(appDatabase, fileUtil)
     }
 }

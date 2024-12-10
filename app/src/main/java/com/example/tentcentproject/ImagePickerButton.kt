@@ -1,4 +1,4 @@
-package com.example.tentcentproject.gallery
+package com.example.tentcentproject
 
 import android.app.Activity
 import android.content.Intent
@@ -11,15 +11,17 @@ import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import com.example.tentcentproject.R
+import timber.log.Timber
 
 @Composable
-fun ImagePickerButton(onImageSelected: (MutableList<Uri>) -> Unit) {
+fun ImagePickerButton(onImageSelected: (Uri) -> Unit) {
     val context = LocalContext.current as ComponentActivity // 获取 Activity 实例
 
     val pickImageLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartActivityForResult()
     ) { result ->
+        Timber.tag("ImagePickerButton").d("result: $result")
+
         if (result.resultCode == Activity.RESULT_OK) {
             val data: Intent? = result.data
             val selectedUris = mutableListOf<Uri>()
@@ -34,7 +36,7 @@ fun ImagePickerButton(onImageSelected: (MutableList<Uri>) -> Unit) {
                 }
             }
             for (uri in selectedUris) {
-                onImageSelected(selectedUris)
+                onImageSelected(uri)
             }
         }
     }
@@ -48,7 +50,7 @@ fun ImagePickerButton(onImageSelected: (MutableList<Uri>) -> Unit) {
         pickImageLauncher.launch(intent)
     }) {
         Icon(
-            painter = painterResource(id = R.drawable.ic_filter_button),
+            painter = painterResource(id = R.drawable.ic_add_button),
             contentDescription = "Filter Button"
         )
     }

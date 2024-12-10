@@ -23,7 +23,7 @@ class FileUtil @Inject constructor(
      * @param uri src file
      * @param filename dest file name
      */
-    suspend fun storePictureFromUri(uri: Uri, filename: String): String? = withContext(Dispatchers.IO) {
+    suspend fun storePictureFromUri(uri: Uri, filename: String): Uri? = withContext(Dispatchers.IO) {
         val contentResolver = context.contentResolver
 
         val destinationFile = File(externalFilesDir, filename)
@@ -38,7 +38,7 @@ class FileUtil @Inject constructor(
                 }
             }
 
-            return@withContext filename
+            return@withContext Uri.fromFile(destinationFile)
         } catch (e : Exception) {
             //TODO specify the exception
             e.printStackTrace()
